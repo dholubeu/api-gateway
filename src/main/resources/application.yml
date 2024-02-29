@@ -1,0 +1,31 @@
+eureka:
+  client:
+    service-url:
+      defaultZone: http://${EUREKA_HOST}:8761/eureka
+
+spring:
+  config:
+    import: optional:file:.env[.properties]
+  application:
+    name: api-gateway
+  cloud:
+    gateway:
+      routes:
+        - id: passengers
+          uri: lb://passengers
+          predicates:
+            - Path=/passengers/**
+          filters:
+            - StripPrefix=1
+        - id: drivers
+          uri: lb://drivers
+          predicates:
+            - Path=/drivers/**
+          filters:
+            - StripPrefix=1
+        - id: rides
+          uri: lb://rides
+          predicates:
+            - Path=/rides/**
+          filters:
+            - StripPrefix=1
